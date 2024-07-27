@@ -22,7 +22,7 @@ const Main = () => {
       return;
     }
 
-    const prompt = `Here's a GitHub profile for you to roast:
+    const prompt = `Here's a GitHub profile for you:
             - Name: ${userDetails.name}
             - Bio: ${userDetails.bio}
             - Avatar URL: ${userDetails.avatarUrl}
@@ -32,7 +32,7 @@ const Main = () => {
             - Starred Repositories: ${userDetails.starredRepositories.totalCount}
             - Total Commits: ${userDetails.contributionsCollection.totalCommitContributions} in this year.
         
-            Go ahead and give a satire roast of this GitHub user! Keep it in around 100 words.`;
+            Go ahead and give a satire roast of this GitHub user! Keep it in around 100 words. If they've done really great, appreaciate them as well.`;
     return await getRoastResponse(prompt);
   }
 
