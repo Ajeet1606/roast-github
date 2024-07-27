@@ -1,9 +1,18 @@
-import './App.css'
+import "./App.css";
+import Footer from "./components/Footer";
+import Main from "./components/Main";
+import Navbar from "./components/Navbar";
 
 function App() {
-  return <>
-    <h1 className='text-3xl font-bold'>Vite + React</h1>
+  return (
+    <>
+      <div className="h-[100vh] w-full font-montserrat flex flex-col justify-between">
+        <Navbar />
+        <Main />
+        <Footer />
+      </div>
     </>
+  );
 }
 
-export default App
+export default App;

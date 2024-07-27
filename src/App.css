@@ -1,0 +1,22 @@
+/* Dark Mode Styles */
+body {
+  background-color: #121212; /* Dark gray background */
+  color: #e0e0e0; /* Light gray text */
+}
+
+a {
+  color: #bb86fc; /* Optional: Add accent color for links (e.g., a soft purple) */
+}
+
+button {
+  background-color: #333333; /* Slightly lighter dark gray for buttons */
+  color: #e0e0e0; /* Light gray text on buttons */
+}
+
+/* Additional styling for readability */
+input,
+textarea {
+  background-color: #1e1e1e; /* Slightly lighter dark gray for input fields */
+  color: #e0e0e0; /* Light gray text in input fields */
+  border: 1px solid #333333; /* Border color matching button */
+}
