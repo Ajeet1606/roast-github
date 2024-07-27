@@ -14,7 +14,8 @@ const Main = () => {
       setRoastMessage("");
       return;
     }
-    const userDetails: ProfileSchema = await getProfileDetails(inputUserName);
+    const trimmedInput = inputUserName.trim();
+    const userDetails: ProfileSchema = await getProfileDetails(trimmedInput);
 
     if (!userDetails) {
       setErrorMessage(`Github Profile not found.`);
