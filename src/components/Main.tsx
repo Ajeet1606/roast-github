@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { ProfileSchema, getProfileDetails } from "../utils/utils";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { toPng } from "html-to-image";
 
 const Main = () => {
   const [inputUserName, setInputUserName] = useState("");
@@ -15,58 +14,77 @@ const Main = () => {
       return;
     }
     const trimmedInput = inputUserName.trim();
-    const userDetails: ProfileSchema = await getProfileDetails(trimmedInput);
+    const URL = "https://roast-github.up.railway.app/api/v1/roast/" + trimmedInput;
 
-    if (!userDetails) {
-      setErrorMessage(`Github Profile not found.`);
-      setRoastMessage("");
-      return;
-    }
-
-    const prompt = `Here's a GitHub profile for you:
-            - Name: ${userDetails.name}
-            - Bio: ${userDetails.bio}
-            - Avatar URL: ${userDetails.avatarUrl}
-            - Repositories: ${userDetails.repositories.totalCount}
-            - Followers: ${userDetails.followers.totalCount}
-            - Following: ${userDetails.following.totalCount}
-            - Starred Repositories: ${userDetails.starredRepositories.totalCount}
-            - Total Commits: ${userDetails.contributionsCollection.totalCommitContributions} in this year.
-        
-            Go ahead and give a satire roast of this GitHub user! Keep it in around 100 words. If they've done really great, appreaciate them as well.`;
-    return await getRoastResponse(prompt);
-  }
-
-  async function getRoastResponse(prompt: string) {
     try {
-      setRoastMessage("Loading...");
       setErrorMessage("");
-      const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY!;
-      const GEMINI_MODEL = import.meta.env.VITE_GEMINI_MODEL!;
-      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({
-        model: GEMINI_MODEL,
-        systemInstruction: "Act as a satire and sarcastic person.",
-      });
-
-      const result = await model.generateContentStream(prompt);
       setRoastMessage("");
-      for await (const chunk of result.stream) {
-        const chunkText = chunk.text();
-        console.log(chunkText);
-        setRoastMessage((prevData) => prevData + chunkText);
-      }
+      const eventSource = new EventSource(URL);
+      eventSource.onmessage = (event) => {
+        const newMessage = event.data;
+        if (newMessage === "[END]") {
+          eventSource.close();
+        } else {
+          setRoastMessage((prevMessages) => prevMessages + newMessage);
+        }
+      };
+      eventSource.onerror = (err) => {
+        if (err.eventPhase === EventSource.CLOSED) {
+          fetch(URL)
+            .then(async (response) => {
+              // Check if the response status is not OK (i.e., status code is not in the range 200-299)
+              if (!response.ok) {
+                // If the response is not OK, read the response body as text
+                const text = await response.text();
+                // Throw an error with the response text
+                console.log("line 42", text);
+
+                throw new Error(text);
+              }
+              // If the response is OK, read the response body as text and return it
+              return response.text();
+            })
+            .then((message) => {
+              // Handle the successful response text
+              console.log("Successful response:", message);
+              // Optionally update your state with the successful message
+              setErrorMessage(message);
+            })
+            .catch((error) => {
+              // Handle any errors that were thrown
+              console.error("Error fetching fallback response:", error);
+              setErrorMessage(error.message); // Set the error message in the state
+            });
+        }
+        eventSource.close();
+        console.error("EventSource failed:", err);
+      };
     } catch (error) {
-      //   console.error("Error calling Gemini API:", error);
+      console.error(error);
       setErrorMessage("An error occurred. Please try again later.");
       setRoastMessage("");
-      return error;
     }
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     setInputUserName(e.target.value);
+  }
+
+  async function downloadImage() {
+    try {
+      const dataUrl = await toPng(document.body, { quality: 1 });
+
+      // Create a link element and trigger a download
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `roast-${inputUserName}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -89,10 +107,26 @@ const Main = () => {
       </form>
 
       <div className="w-full mt-4">
-        <p className="text-center">{roastMessage}</p>
-        {
-          errorMessage && <p className="text-center text-red-500">{errorMessage}</p>
-        }
+        {roastMessage === "Github Profile not found." ? (
+          <p className="text-center text-red-500">{roastMessage}</p>
+        ) : (
+          <p className="text-center">{roastMessage}</p>
+        )}
+
+        {errorMessage && (
+          <p className="text-center text-red-500">{errorMessage}</p>
+        )}
+
+        {errorMessage === "" && roastMessage != "" && roastMessage != "Github Profile not found." && (
+          <div className="mt-2 w-full flex justify-center items-center">
+            <button
+              className="mt-2 rounded-md p-2 border border-green-400 text-green-400 mx-auto"
+              onClick={downloadImage}
+            >
+              Download Image
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
