@@ -59,6 +59,7 @@ const Main = () => {
     } catch (error) {
       //   console.error("Error calling Gemini API:", error);
       setErrorMessage("An error occurred. Please try again later.");
+      setRoastMessage("");
       return error;
     }
   }
