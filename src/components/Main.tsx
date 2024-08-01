@@ -22,7 +22,7 @@ const Main = () => {
     }
     const trimmedInput = inputUserName.trim();
     //https://roast-github.up.railway.app
-    const URL = "http://localhost:3000/api/v1/roast/" + trimmedInput;
+    const URL = "https://roast-github.up.railway.app/api/v1/roast/" + trimmedInput;
 
     setErrorMessage("");
     setRoastMessage("");
