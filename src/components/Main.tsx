@@ -22,7 +22,7 @@ const Main = () => {
     }
     const trimmedInput = inputUserName.trim();
     //https://roast-github.up.railway.app
-    const URL = "https://roast-github.up.railway.app/api/v1/roast/" + trimmedInput;
+    const URL = "http://localhost:3000/api/v1/roast/" + trimmedInput;
 
     setErrorMessage("");
     setRoastMessage("");
@@ -114,7 +114,7 @@ const Main = () => {
           <input
             type="text"
             placeholder="Enter Your GitHub username"
-            className="w-full rounded-md p-2 mb-4 border-white outline-none"
+            className="w-full rounded-md p-2 mb-4 border-white outline-none text-center"
             onChange={handleInputChange}
           />
           <button

@@ -1,6 +1,6 @@
 /* Dark Mode Styles */
 body {
-  background-color: #121212; /* Dark gray background */
+  background-color: #020617; /* Dark gray background */
   color: #e0e0e0; /* Light gray text */
 }
 
@@ -16,7 +16,7 @@ button {
 /* Additional styling for readability */
 input,
 textarea {
-  background-color: #1e1e1e; /* Slightly lighter dark gray for input fields */
+  background-color: #020617; /* Slightly lighter dark gray for input fields */
   color: #e0e0e0; /* Light gray text in input fields */
   border: 1px solid #333333; /* Border color matching button */
 }
