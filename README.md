@@ -50,14 +50,6 @@ Once you have installed the dependencies and configured the environment variable
 pnpm dev
 ```
 
-## Contributing 🤝
-We welcome contributions to RoastGithub! If you would like to contribute, please follow these guidelines:
-
-1. Fork the repository.
-2. Create a new branch for your feature or fix.
-3. Make your changes and ensure that they are well-tested.
-4. Submit a pull request with a clear description of your changes.
-
 ## Acknowledgments 🙏
 - GitHub API
 - Gemini API
