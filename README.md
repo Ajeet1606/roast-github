@@ -25,12 +25,14 @@ To get started with RoastGithub, follow these steps:
 ## Clone the Repository
 ```
 git clone https://github.com/Ajeet1606/roast-github.git
+git clone https://github.com/Ajeet1606/github-roast-backend
 cd roast-github
 ```
 
 ## Install Dependencies
 ```
-pnpm install
+Frontend: pnpm install
+Backend: yarn
 ```
 
 ## Configuration ⚙️
